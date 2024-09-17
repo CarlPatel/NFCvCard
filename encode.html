@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vCard Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <h1>Fill in vCard Information</h1>
+    <form id="vcardForm">
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName" placeholder="John">
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName" placeholder="Doe">
+
+        <label for="nickname">Nickname:</label>
+        <input type="text" id="nickname" name="nickname" placeholder="Johnny">
+
+        <label for="org">Company:</label>
+        <input type="text" id="org" name="org" placeholder="Global Tech Solutions">
+
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" placeholder="Software Engineer">
+
+        <label for="workEmail">Work Email:</label>
+        <input type="email" id="workEmail" name="workEmail" placeholder="john.doe@globaltech.com">
+
+        <label for="homeEmail">Personal Email:</label>
+        <input type="email" id="homeEmail" name="homeEmail" placeholder="john.doe@example.com">
+
+        <label for="cellPhone">Cell Phone:</label>
+        <input type="tel" id="cellPhone" name="cellPhone" placeholder="+1-555-555-5555">
+
+        <label for="workPhone">Work Phone:</label>
+        <input type="tel" id="workPhone" name="workPhone" placeholder="+1-555-555-5555">
+
+        <label>Work Address:</label>
+        <div class="address-section">        
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" placeholder="123 Tech Lane">
+        
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" placeholder="Davis">
+        
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" placeholder="CA">
+        
+            <label for="zip">Zip:</label>
+            <input type="text" id="zip" name="zip" placeholder="12345">
+        
+            <label for="country">Country:</label>
+            <input type="text" id="country" name="country" placeholder="USA">
+        </div>
+
+        <label for="workUrl">Work Website:</label>
+        <input type="url" id="workUrl" name="workUrl" placeholder="https://www.globaltech.com">
+
+        <label for="personalUrl">Personal Website:</label>
+        <input type="url" id="personalUrl" name="personalUrl" placeholder="https://www.johndoe.com">
+
+        <label for="bday">Birthday:</label>
+        <div>
+            <select id="birthMonth" class="birthday-select" name="birthMonth"></select>
+            <select id="birthDay" class="birthday-select" name="birthDay"></select>
+            <select id="birthYear" class="birthday-select" name="birthYear"></select>
+        </div>
+
+        <div id="socialProfiles">
+            <label>Social Profiles:</label>
+            <div class="social-profile">
+                <select name="socialType">
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="twitter">Twitter</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="github">GitHub</option>
+                    <option value="facebook">Facebook</option>
+                </select>
+                <input type="url" name="socialUrl" placeholder="https://yourprofile.com">
+                <button type="button" onclick="addSocialProfile()">+</button>
+            </div>
+        </div>
+
+        <button type="button" onclick="generateVCard()">Generate VCARD</button>
+    </form>
+
+    <div id="result">
+        <h2>Generated VCARD</h2>
+        <pre id="vcardOutput"></pre>
+    </div>
+
+    <div id="base64Result">
+        <h2>vCard in Base64 Encoding</h2>
+        <pre id="base64Output"></pre>
+        <p id="byteSize">Byte Size: <span id="byteSizeAnswer"></span></p>
+        <a id="decoderLink" href="#" target="_blank">Decoder Link</a>
+    </div>
+
+
+    <script>
+        function populateSelect(selectElement, start, end, placeholder) {
+            const option = document.createElement('option');
+            option.value = "";
+            option.text = placeholder || "";
+            selectElement.appendChild(option);
+            for (let i = start; i <= end; i++) {
+                const option = document.createElement('option');
+                option.value = i.toString().padStart(2, '0');
+                option.text = i.toString().padStart(2, '0');
+                selectElement.appendChild(option);
+            }
+        }
+
+        function populateBirthdayDropdowns() {
+            const birthMonthSelect = document.getElementById('birthMonth');
+            const birthDaySelect = document.getElementById('birthDay');
+            const birthYearSelect = document.getElementById('birthYear');
+
+            populateSelect(birthMonthSelect, 1, 12, "-- Select Month --");
+            populateSelect(birthDaySelect, 1, 31, "-- Select Day --");
+            populateSelect(birthYearSelect, 1900, new Date().getFullYear(), "-- Select Year --");
+
+            birthMonthSelect.value = "";
+            birthDaySelect.value = "";
+            birthYearSelect.value = "";
+        }
+
+        function addSocialProfile() {
+            const socialProfilesDiv = document.getElementById('socialProfiles');
+
+            const newProfileDiv = document.createElement('div');
+            newProfileDiv.className = 'social-profile';
+            newProfileDiv.innerHTML = `
+                <select name="socialType">
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="twitter">Twitter</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="github">GitHub</option>
+                    <option value="facebook">Facebook</option>
+                </select>
+                <input type="url" name="socialUrl" placeholder="https://yourprofile.com">
+                <button type="button" onclick="removeSocialProfile(this)">-</button>
+            `;
+            socialProfilesDiv.appendChild(newProfileDiv);
+        }
+
+        function removeSocialProfile(button) {
+            const profileDiv = button.parentNode;
+            profileDiv.parentNode.removeChild(profileDiv);
+        }
+
+        function addVCardLine(vcard, label, value) {
+            if (value) {
+                vcard.push(`${label}:${value}`);
+            }
+        }
+
+        function generateVCard() {
+            const vcard = [];
+            vcard.push("BEGIN:VCARD");
+            vcard.push("VERSION:3.0");
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            if (firstName || lastName) {
+                const fullName = `${firstName} ${lastName}`.trim();
+                const n = `${lastName};${firstName};;;`.trim(';');
+                addVCardLine(vcard, "FN", fullName);
+                addVCardLine(vcard, "N", n);
+            }
+
+            const nickname = document.getElementById('nickname').value;
+            addVCardLine(vcard, "NICKNAME", nickname);
+
+            const org = document.getElementById('org').value;
+            addVCardLine(vcard, "ORG", org);
+
+            const title = document.getElementById('title').value;
+            addVCardLine(vcard, "TITLE", title);
+
+            const workEmail = document.getElementById('workEmail').value;
+            addVCardLine(vcard, "EMAIL;TYPE=WORK", workEmail);
+
+            const homeEmail = document.getElementById('homeEmail').value;
+            addVCardLine(vcard, "EMAIL;TYPE=HOME", homeEmail);
+
+            const cellPhone = document.getElementById('cellPhone').value;
+            addVCardLine(vcard, "TEL;TYPE=CELL", cellPhone);
+
+            const workPhone = document.getElementById('workPhone').value;
+            addVCardLine(vcard, "TEL;TYPE=WORK", workPhone);
+
+            const street = document.getElementById('street').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const zip = document.getElementById('zip').value;
+            const country = document.getElementById('country').value;
+
+            if (street || city || state || zip || country) {
+                const workAddress = `;;${street};${city};${state};${zip};${country}`.replace(/;+$/, '');
+                addVCardLine(vcard, "ADR;TYPE=WORK", workAddress);
+            }
+
+            const birthYear = document.getElementById('birthYear').value;
+            const birthMonth = document.getElementById('birthMonth').value;
+            const birthDay = document.getElementById('birthDay').value;
+            if (birthYear && birthMonth && birthDay) {
+                const bday = `${birthYear}${birthMonth}${birthDay}`;
+                addVCardLine(vcard, "BDAY", bday);
+            }
+
+            const workUrl = document.getElementById('workUrl').value;
+            addVCardLine(vcard, "URL;TYPE=WORK", workUrl);
+
+            const personalUrl = document.getElementById('personalUrl').value;
+            addVCardLine(vcard, "URL;TYPE=PERSONAL", personalUrl);
+
+            const socialProfiles = document.querySelectorAll('.social-profile');
+            socialProfiles.forEach(profile => {
+                const socialType = profile.querySelector('select[name="socialType"]').value;
+                const socialUrl = profile.querySelector('input[name="socialUrl"]').value;
+                if (socialType && socialUrl) {
+                    addVCardLine(vcard, `X-SOCIALPROFILE;TYPE=${socialType}`, socialUrl);
+                }
+            });
+            vcard.push("END:VCARD");
+
+            const vcardString = vcard.join("\n").trim();
+            document.getElementById('vcardOutput').textContent = vcardString;
+
+            // Convert the vCard string to Base64
+            const vcardBase64 = btoa(unescape(encodeURIComponent(vcardString)));
+            document.getElementById('base64Output').textContent = vcardBase64;
+
+            // Calculate the byte size of the Base64 encoded vCard
+            const byteSize = vcardBase64.length * 3 / 4;
+            document.getElementById('byteSizeAnswer').textContent = `${byteSize} bytes`;
+
+            // Generate the decoder link with the correct file path
+            const currentDomainAndPath = window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+            const decoderLink = `${currentDomainAndPath}/decode.html?vcard=${encodeURIComponent(vcardBase64)}`;
+            document.getElementById('decoderLink').href = decoderLink;
+            document.getElementById('decoderLink').textContent = decoderLink;
+        }
+
+        document.addEventListener('DOMContentLoaded', populateBirthdayDropdowns);
+    </script>
+</body>
+
+</html>
