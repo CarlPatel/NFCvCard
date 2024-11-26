@@ -67,23 +67,59 @@ function parseVCard(vCardData) {
     return contact;
 }
 
-function displayVCard(contact) {
+function downloadVCard(base64VCard) {
+    const blob = base64ToBlob(base64VCard, 'text/vcard');
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'contact.vcf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function displayVCard(contact, base64VCard) {
     const contactContainer = document.getElementById('contact-info');
-    contactContainer.innerHTML = `
-        <p><strong>Full Name:</strong> ${contact.fullName}</p>
-        <p><strong>Nickname:</strong> ${contact.nickname}</p>
-        <p><strong>Organization:</strong> ${contact.organization}</p>
-        <p><strong>Title:</strong> ${contact.title}</p>
-        <p><strong>Work Email:</strong> ${contact.workEmail}</p>
-        <p><strong>Home Email:</strong> ${contact.homeEmail}</p>
-        <p><strong>Cell Phone:</strong> ${contact.cellPhone}</p>
-        <p><strong>Work Phone:</strong> ${contact.workPhone}</p>
-        <p><strong>Work Address:</strong> ${contact.workAddress}</p>
-        <p><strong>Birthday:</strong> ${contact.birthday}</p>
-        <p><strong>Work Website:</strong> <a href="${contact.workWebsite}" target="_blank">${contact.workWebsite}</a></p>
-        <p><strong>Personal Website:</strong> <a href="${contact.personalWebsite}" target="_blank">${contact.personalWebsite}</a></p>
-        <p><strong>Social Profiles:</strong> ${contact.socialProfiles.map(profile => `<a href="${profile}" target="_blank">${profile}</a>`).join(', ')}</p>
-    `;
+    contactContainer.innerHTML = ''; // Clear existing content
+
+    const addField = (label, value, isLink = false) => {
+        if (value) {
+            const field = document.createElement('p');
+            if (isLink) {
+                field.innerHTML = `<strong>${label}:</strong> <a href="${value}" target="_blank">${value}</a>`;
+            } else {
+                field.innerHTML = `<strong>${label}:</strong> ${value}`;
+            }
+            contactContainer.appendChild(field);
+        }
+    };
+
+    // Add fields dynamically if they have a value
+    addField('Full Name', contact.fullName);
+    addField('Nickname', contact.nickname);
+    addField('Organization', contact.organization);
+    addField('Title', contact.title);
+    addField('Work Email', contact.workEmail);
+    addField('Home Email', contact.homeEmail);
+    addField('Cell Phone', contact.cellPhone);
+    addField('Work Phone', contact.workPhone);
+    addField('Work Address', contact.workAddress);
+    addField('Birthday', contact.birthday);
+    addField('Work Website', contact.workWebsite, true);
+    addField('Personal Website', contact.personalWebsite, true);
+
+    if (contact.socialProfiles.length > 0) {
+        const profiles = contact.socialProfiles.map(profile => `<a href="${profile}" target="_blank">${profile}</a>`).join(', ');
+        addField('Social Profiles', profiles);
+    }
+
+    // Add the download button
+    const downloadButton = document.createElement('button');
+    downloadButton.textContent = 'Download vCard';
+    downloadButton.onclick = () => downloadVCard(base64VCard);
+
+    contactContainer.appendChild(downloadButton);
 }
 
 function handleVCard() {
@@ -97,13 +133,16 @@ function handleVCard() {
         console.log(contact);
 
         // Display the vCard info
-        displayVCard(contact);
+        displayVCard(contact, base64VCard);
+
+        // Download the vCard file
+        downloadVCard(base64VCard);
     } else {
         // No vCard data found, create a textbox and button
         const container = document.getElementById('contact-info');
         container.innerHTML = `
             <label for="vcard-input">Enter vCard base64 data:</label>
-            <input type="text" id="vcard-input" placeholder="Paste base64 vCard data here">
+            <input type="text" id="vcard-input" placeholder="Paste base64 vCard data">
             <button id="submit-vcard">Submit</button>
         `;
 

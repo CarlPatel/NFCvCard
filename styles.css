@@ -229,3 +229,99 @@ pre {
     width: 100%;
     margin-bottom: 15px;
 }
+
+
+#contact-info {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the vCard input section (when no vCard data is found) */
+#contact-info label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#contact-info input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 40px;
+}
+
+#contact-info button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#contact-info button:hover {
+    background-color: #0056b3;
+}
+
+/* Style for dynamic vCard fields */
+#contact-info p {
+    font-size: 18px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    color: #333;
+}
+
+#contact-info p a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#contact-info p a:hover {
+    text-decoration: underline;
+}
+
+/* Style for social profiles displayed as links */
+#contact-info .social-profiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#contact-info .social-profiles a {
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: #007bff;
+}
+
+#contact-info .social-profiles a:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #contact-info {
+        padding: 15px;
+    }
+
+    #contact-info p {
+        font-size: 14px;
+    }
+
+    #contact-info input, #contact-info button {
+        font-size: 14px;
+    }
+}
