@@ -1,5 +1,5 @@
 function base64DecodeUnicode(str) {
-    return decodeURIComponent(atob(str).split('').map(function(c) {
+    return decodeURIComponent(atob(str).split('').map(function (c) {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 }
@@ -16,25 +16,51 @@ function base64ToBlob(base64, mime) {
 
 function parseVCard(vCardData) {
     const vCardLines = vCardData.split('\n');
-    let contact = {
-        name: "N/A",
-        email: "N/A",
-        phone: "N/A",
-        address: "N/A",
-        organization: "N/A"
+    const contact = {
+        fullName: "",
+        nickname: "",
+        organization: "",
+        title: "",
+        workEmail: "",
+        homeEmail: "",
+        cellPhone: "",
+        workPhone: "",
+        workAddress: "",
+        birthday: "",
+        workWebsite: "",
+        personalWebsite: "",
+        socialProfiles: []
     };
 
     vCardLines.forEach(line => {
         if (line.startsWith('FN:')) {
-            contact.name = line.substring(3);
-        } else if (line.startsWith('EMAIL;')) {
-            contact.email = line.substring(6);
-        } else if (line.startsWith('TEL:')) {
-            contact.phone = line.substring(4);
-        } else if (line.startsWith('ADR:')) {
-            contact.address = line.substring(4).replace(/;/g, ', ');
+            contact.fullName = line.substring(3);
+        } else if (line.startsWith('NICKNAME:')) {
+            contact.nickname = line.substring(9);
         } else if (line.startsWith('ORG:')) {
             contact.organization = line.substring(4);
+        } else if (line.startsWith('TITLE:')) {
+            contact.title = line.substring(6);
+        } else if (line.startsWith('EMAIL;TYPE=WORK:')) {
+            contact.workEmail = line.substring(16);
+        } else if (line.startsWith('EMAIL;TYPE=HOME:')) {
+            contact.homeEmail = line.substring(16);
+        } else if (line.startsWith('TEL;TYPE=CELL:')) {
+            contact.cellPhone = line.substring(14);
+        } else if (line.startsWith('TEL;TYPE=WORK:')) {
+            contact.workPhone = line.substring(14);
+        } else if (line.startsWith('ADR;TYPE=WORK:')) {
+            const addressParts = line.substring(14).split(';');
+            contact.workAddress = addressParts.filter(Boolean).join(', ');
+        } else if (line.startsWith('BDAY:')) {
+            const bday = line.substring(5);
+            contact.birthday = `${bday.slice(0, 4)}-${bday.slice(4, 6)}-${bday.slice(6, 8)}`;
+        } else if (line.startsWith('URL;TYPE=WORK:')) {
+            contact.workWebsite = line.substring(14);
+        } else if (line.startsWith('URL;TYPE=PERSONAL:')) {
+            contact.personalWebsite = line.substring(18);
+        } else if (line.startsWith('X-SOCIALPROFILE;')) {
+            contact.socialProfiles.push(line.substring(line.indexOf(':') + 1));
         }
     });
 
@@ -42,40 +68,36 @@ function parseVCard(vCardData) {
 }
 
 function displayVCard(contact) {
-    document.getElementById('name').textContent = contact.name;
-    document.getElementById('email').textContent = contact.email;
-    document.getElementById('phone').textContent = contact.phone;
-    document.getElementById('address').textContent = contact.address;
-    document.getElementById('organization').textContent = contact.organization;
-}
-
-function downloadVCard(base64VCard) {
-    const blob = base64ToBlob(base64VCard, 'text/vcard');
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'contact.vcf';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const contactContainer = document.getElementById('contact-info');
+    contactContainer.innerHTML = `
+        <p><strong>Full Name:</strong> ${contact.fullName}</p>
+        <p><strong>Nickname:</strong> ${contact.nickname}</p>
+        <p><strong>Organization:</strong> ${contact.organization}</p>
+        <p><strong>Title:</strong> ${contact.title}</p>
+        <p><strong>Work Email:</strong> ${contact.workEmail}</p>
+        <p><strong>Home Email:</strong> ${contact.homeEmail}</p>
+        <p><strong>Cell Phone:</strong> ${contact.cellPhone}</p>
+        <p><strong>Work Phone:</strong> ${contact.workPhone}</p>
+        <p><strong>Work Address:</strong> ${contact.workAddress}</p>
+        <p><strong>Birthday:</strong> ${contact.birthday}</p>
+        <p><strong>Work Website:</strong> <a href="${contact.workWebsite}" target="_blank">${contact.workWebsite}</a></p>
+        <p><strong>Personal Website:</strong> <a href="${contact.personalWebsite}" target="_blank">${contact.personalWebsite}</a></p>
+        <p><strong>Social Profiles:</strong> ${contact.socialProfiles.map(profile => `<a href="${profile}" target="_blank">${profile}</a>`).join(', ')}</p>
+    `;
 }
 
 function handleVCard() {
     const params = new URLSearchParams(window.location.search);
     const base64VCard = params.get('vcard');
-    
+
     if (base64VCard) {
         const decodedVCard = base64DecodeUnicode(base64VCard);
         console.log(decodedVCard);
         const contact = parseVCard(decodedVCard);
         console.log(contact);
-        
+
         // Display the vCard info
         displayVCard(contact);
-
-        // Trigger the download
-        //downloadVCard(base64VCard);
     } else {
         // No vCard data found, create a textbox and button
         const container = document.getElementById('contact-info');
@@ -89,11 +111,11 @@ function handleVCard() {
         const vcardInput = container.querySelector('#vcard-input');
 
         submitButton.addEventListener('click', () => {
-            const inputVCard = vcardInput.value;
+            const inputVCard = vcardInput.value.trim();
             const newParams = new URLSearchParams(window.location.search);
             newParams.set('vcard', inputVCard);
             const newUrl = `${window.location.pathname}?${newParams.toString()}`;
-            
+
             // Redirect to the new URL with the vCard parameter
             window.location.href = newUrl;
         });
