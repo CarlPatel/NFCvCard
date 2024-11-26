@@ -16,6 +16,12 @@ body {
     padding: 20px; /* Add some padding to the top and bottom for better spacing */
 }
 
+.index-view {
+    text-align: center;
+    align-items: center;
+    margin: auto auto;
+}
+
 /* Form container styling */
 form {
     background-color: #ffffff;
@@ -71,6 +77,23 @@ button:hover {
     background-color: #0056b3;
 }
 
+.index-button {
+    display: inline-block;
+    margin: 25px;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+.index-button:hover {
+    background-color: #0056b3;
+}
+
 /* Adjustments for the address section */
 .address-section {
     margin-bottom: 20px;
@@ -108,8 +131,8 @@ h3 {
 /* Social profile section */
 .social-profile {
     display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+    align-items: start;
+    margin-bottom: 5px;
     justify-content: space-between;
 }
 

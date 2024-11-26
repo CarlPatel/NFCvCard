@@ -21,13 +21,13 @@ function parseVCard(vCardData) {
         email: "N/A",
         phone: "N/A",
         address: "N/A",
-        organization: "N/A" // Default to "N/A"
+        organization: "N/A"
     };
 
     vCardLines.forEach(line => {
         if (line.startsWith('FN:')) {
             contact.name = line.substring(3);
-        } else if (line.startsWith('EMAIL:')) {
+        } else if (line.startsWith('EMAIL;')) {
             contact.email = line.substring(6);
         } else if (line.startsWith('TEL:')) {
             contact.phone = line.substring(4);
@@ -67,13 +67,15 @@ function handleVCard() {
     
     if (base64VCard) {
         const decodedVCard = base64DecodeUnicode(base64VCard);
+        console.log(decodedVCard);
         const contact = parseVCard(decodedVCard);
+        console.log(contact);
         
         // Display the vCard info
         displayVCard(contact);
 
         // Trigger the download
-        downloadVCard(base64VCard);
+        //downloadVCard(base64VCard);
     } else {
         // No vCard data found, create a textbox and button
         const container = document.getElementById('contact-info');
