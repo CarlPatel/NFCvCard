@@ -1,4 +1,4 @@
-/* Basic resets */
+
 * {
     margin: 0;
     padding: 0;
@@ -9,11 +9,11 @@
 body {
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align items from the top */
+    align-items: flex-start;
     flex-direction: column;
-    min-height: 100vh; /* Ensure the body takes up the full height of the viewport */
+    min-height: 100vh;
     background-color: #f0f0f0;
-    padding: 20px; /* Add some padding to the top and bottom for better spacing */
+    padding: 20px;
 }
 
 .index-view {
@@ -22,22 +22,21 @@ body {
     margin: auto auto;
 }
 
-/* Form container styling */
 form {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 50%; /* 50% of the viewport width */
+    width: 50%;
     min-width: 300px;
-    margin: 20px auto; /* Add margin to ensure spacing and centering */
+    margin: 20px auto;
 }
 
 h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
-    margin: 15px auto 0px auto; /* Add margin to ensure spacing and centering */
+    margin: 15px auto 0px auto;
 }
 
 label {
@@ -94,10 +93,9 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Adjustments for the address section */
 .address-section {
     margin-bottom: 20px;
-    padding-left: 20px; /* Tab effect */
+    padding-left: 20px;
 }
 
 .address-section label {
@@ -109,7 +107,7 @@ button:hover {
 }
 
 .address-section input {
-    width: 70%; /* Smaller input width */
+    width: 70%;
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -128,7 +126,6 @@ h3 {
     color: #007bff;
 }
 
-/* Social profile section */
 .social-profile {
     display: flex;
     align-items: start;
@@ -173,7 +170,6 @@ h3 {
     background-color: #0056b3;
 }
 
-/* Results section */
 #result, #base64Result {
     margin-top: 20px;
     background-color: #ffffff;
@@ -182,7 +178,7 @@ h3 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 50%;
     min-width: 300px;
-    margin: 10px auto; /* Add margin to ensure spacing and centering */
+    margin: 10px auto;
 }
 
 h2 {
@@ -216,15 +212,14 @@ pre {
     margin-top: 10px;
     color: #007bff;
     text-decoration: none;
-    word-wrap: break-word; /* Allow long text to wrap */
-    word-break: break-all;  /* Break long words or URLs */
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 #decoderLink:hover {
     text-decoration: underline;
 }
 
-/* Ensure select dropdowns for birthdays are aligned properly */
 .birthday-select {
     width: 100%;
     margin-bottom: 15px;
@@ -241,7 +236,6 @@ pre {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Style for the vCard input section (when no vCard data is found) */
 #contact-info label {
     font-size: 18px;
     font-weight: bold;
@@ -273,7 +267,6 @@ pre {
     background-color: #0056b3;
 }
 
-/* Style for dynamic vCard fields */
 #contact-info p {
     font-size: 18px;
     margin-bottom: 10px;
@@ -290,7 +283,6 @@ pre {
     text-decoration: underline;
 }
 
-/* Style for social profiles displayed as links */
 #contact-info .social-profiles {
     display: flex;
     flex-wrap: wrap;
@@ -311,7 +303,6 @@ pre {
     border-color: #ccc;
 }
 
-/* Responsive adjustments */
 @media (max-width: 600px) {
     #contact-info {
         padding: 15px;

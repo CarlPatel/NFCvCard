@@ -15,6 +15,7 @@ function base64ToBlob(base64, mime) {
 }
 
 function parseVCard(vCardData) {
+    // Initialize contact object with empty fields
     const vCardLines = vCardData.split('\n');
     const contact = {
         fullName: "",
@@ -32,6 +33,7 @@ function parseVCard(vCardData) {
         socialProfiles: []
     };
 
+    // Parse each line of the vCard data
     vCardLines.forEach(line => {
         if (line.startsWith('FN:')) {
             contact.fullName = line.substring(3);
@@ -81,7 +83,7 @@ function downloadVCard(base64VCard) {
 
 function displayVCard(contact, base64VCard) {
     const contactContainer = document.getElementById('contact-info');
-    contactContainer.innerHTML = ''; // Clear existing content
+    contactContainer.innerHTML = '';
 
     const addField = (label, value, isLink = false) => {
         if (value) {
@@ -114,7 +116,7 @@ function displayVCard(contact, base64VCard) {
         addField('Social Profiles', profiles);
     }
 
-    // Add the download button
+    // Download button
     const downloadButton = document.createElement('button');
     downloadButton.textContent = 'Download vCard';
     downloadButton.onclick = () => downloadVCard(base64VCard);
