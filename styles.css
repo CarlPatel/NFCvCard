@@ -1,4 +1,4 @@
-/* Basic resets */
+
 * {
     margin: 0;
     padding: 0;
@@ -9,29 +9,34 @@
 body {
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Align items from the top */
+    align-items: flex-start;
     flex-direction: column;
-    min-height: 100vh; /* Ensure the body takes up the full height of the viewport */
+    min-height: 100vh;
     background-color: #f0f0f0;
-    padding: 20px; /* Add some padding to the top and bottom for better spacing */
+    padding: 20px;
 }
 
-/* Form container styling */
+.index-view {
+    text-align: center;
+    align-items: center;
+    margin: auto auto;
+}
+
 form {
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 50%; /* 50% of the viewport width */
+    width: 50%;
     min-width: 300px;
-    margin: 20px auto; /* Add margin to ensure spacing and centering */
+    margin: 20px auto;
 }
 
 h1 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
-    margin: 15px auto 0px auto; /* Add margin to ensure spacing and centering */
+    margin: 15px auto 0px auto;
 }
 
 label {
@@ -71,10 +76,26 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Adjustments for the address section */
+.index-button {
+    display: inline-block;
+    margin: 25px;
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+.index-button:hover {
+    background-color: #0056b3;
+}
+
 .address-section {
     margin-bottom: 20px;
-    padding-left: 20px; /* Tab effect */
+    padding-left: 20px;
 }
 
 .address-section label {
@@ -86,7 +107,7 @@ button:hover {
 }
 
 .address-section input {
-    width: 70%; /* Smaller input width */
+    width: 70%;
     padding: 8px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
@@ -105,11 +126,10 @@ h3 {
     color: #007bff;
 }
 
-/* Social profile section */
 .social-profile {
     display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+    align-items: start;
+    margin-bottom: 5px;
     justify-content: space-between;
 }
 
@@ -150,7 +170,6 @@ h3 {
     background-color: #0056b3;
 }
 
-/* Results section */
 #result, #base64Result {
     margin-top: 20px;
     background-color: #ffffff;
@@ -159,7 +178,7 @@ h3 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 50%;
     min-width: 300px;
-    margin: 10px auto; /* Add margin to ensure spacing and centering */
+    margin: 10px auto;
 }
 
 h2 {
@@ -193,16 +212,107 @@ pre {
     margin-top: 10px;
     color: #007bff;
     text-decoration: none;
-    word-wrap: break-word; /* Allow long text to wrap */
-    word-break: break-all;  /* Break long words or URLs */
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 #decoderLink:hover {
     text-decoration: underline;
 }
 
-/* Ensure select dropdowns for birthdays are aligned properly */
 .birthday-select {
     width: 100%;
     margin-bottom: 15px;
+}
+
+
+#contact-info {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#contact-info label {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#contact-info input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 40px;
+}
+
+#contact-info button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#contact-info button:hover {
+    background-color: #0056b3;
+}
+
+#contact-info p {
+    font-size: 18px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    color: #333;
+}
+
+#contact-info p a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+#contact-info p a:hover {
+    text-decoration: underline;
+}
+
+#contact-info .social-profiles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#contact-info .social-profiles a {
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: #007bff;
+}
+
+#contact-info .social-profiles a:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+}
+
+@media (max-width: 600px) {
+    #contact-info {
+        padding: 15px;
+    }
+
+    #contact-info p {
+        font-size: 14px;
+    }
+
+    #contact-info input, #contact-info button {
+        font-size: 14px;
+    }
 }
